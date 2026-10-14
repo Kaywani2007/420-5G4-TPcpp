@@ -179,7 +179,14 @@ int main(int argc, char* argv[]) {
             
             case 7: { // Add User
                 string name = getInput("Entrez le nom de l'utilisateur : ");
-                string userId = getInput("Entrez l'ID de l'utilisateur : ");
+                int nbUser = library.getAllUsers().size() + 1;
+                string userId = "USR";
+                if(nbUser < 10){
+                    userId += "00";
+                } else if(nbUser < 100){
+                    userId += "0";
+                }
+                userId += to_string(nbUser);
                 
                 if (library.findUserById(userId)) {
                     cout << "Erreur : Un utilisateur avec l'ID " << userId << " existe déjà.\n";
