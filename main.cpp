@@ -244,6 +244,7 @@ int main(int argc, char* argv[]) {
             case 12: { // Save Data
                 if(dataDir.empty()){
                     cout << "Aucun répertoire de données spécifié. Les données ne seront pas sauvegardées\n"; 
+                    cout << "Ajouter un répertoire de données\n"; 
                 }
                 else if (fileManager.saveLibraryData(library)) {
                     cout << "Données de la bibliothèque sauvegardées avec succès !\n";
@@ -255,7 +256,12 @@ int main(int argc, char* argv[]) {
             }
             
             case 13: { // Create Backup
+                if(dataDir.empty()){
+                    cout << "Aucun répertoire de données spécifié. Les données ne seront pas crées\n"; 
+                    cout << "Ajouter un répertoire de données\n"; 
+                } else {
                 fileManager.createBackup();
+                }     
                 pauseForInput();
                 break;
             }
@@ -263,6 +269,7 @@ int main(int argc, char* argv[]) {
             case 0: // Exit
             if(dataDir.empty()){
                 cout << "Aucun répertoire de données spécifié. Les données ne seront pas sauvegardées\n";
+                cout << "Ajouter un répertoire de données\n"; 
             }else{
                 cout << "Sauvegarde des données avant la fermeture...\n";
                 fileManager.saveLibraryData(library);
