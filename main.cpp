@@ -116,6 +116,8 @@ int main(int argc, char* argv[]) {
                     Book newBook(title, author, isbn);
                     library.addBook(newBook);
                     cout << "Livre ajouté avec succès !\n";
+                    string info = newBook.getTitle() + "|" + newBook.getAuthor() + "|" + newBook.getISBN() + "|1|";
+                    fileManager.creerJournal("AJOUT LIVRE", info);
                 }
                 pauseForInput();
                 break;
@@ -126,6 +128,7 @@ int main(int argc, char* argv[]) {
                 
                 if (library.removeBook(isbn)) {
                     cout << "Livre supprimé avec succès !\n";
+                    fileManager.creerJournal("SUPPRESSION LIVRE", isbn);
                 } else {
                     cout << "Livre non trouvé.\n";
                 }
@@ -146,6 +149,7 @@ int main(int argc, char* argv[]) {
                         cout << results[i]->toString() << "\n";
                         cout << "-----------------------------\n";
                     }
+                    fileManager.creerJournal("RECHERCHE TITRE", title);
                 }
                 pauseForInput();
                 break;
@@ -164,6 +168,7 @@ int main(int argc, char* argv[]) {
                         cout << results[i]->toString() << "\n";
                         cout << "-----------------------------\n";
                     }
+                    fileManager.creerJournal("RECHERCHE AUTEUR", author);
                 }
                 pauseForInput();
                 break;
@@ -171,13 +176,21 @@ int main(int argc, char* argv[]) {
             
             case 5: {// Display All Books
                 string choixTri = getInput("Trier par titre(1) ou par auteur(2) ?");
+                string choixMot;
+                if(choixTri == "1"){
+                    choixMot = "titre";
+                } else{
+                    choixMot = "auteur";
+                }
                 library.displayAllBooks(choixTri == "2");
+                fileManager.creerJournal("AFFICHER LIVRES PAR " + choixMot,"");
                 pauseForInput();
                 break;
             }
             
             case 6: // Display Available Books
                 library.displayAvailableBooks();
+                fileManager.creerJournal("AFFICHER LIVRES DISPONIBLES", "");
                 pauseForInput();
                 break;
             
@@ -198,6 +211,9 @@ int main(int argc, char* argv[]) {
                     User newUser(name, userId);
                     library.addUser(newUser);
                     cout << "Utilisateur ajouté avec succès !\n";
+
+                    string info = newUser.getName() + "|" + newUser.getUserId();
+                    fileManager.creerJournal("AJOUT UTILISATEUR", info);
                 }
                 pauseForInput();
                 break;
@@ -205,6 +221,7 @@ int main(int argc, char* argv[]) {
             
             case 8: // Display All Users
                 library.displayAllUsers();
+                fileManager.creerJournal("AFFICHER TOUS UTILISATEURS","");                
                 pauseForInput();
                 break;
             
@@ -236,6 +253,7 @@ int main(int argc, char* argv[]) {
                 
                 if (library.returnBook(isbn)) {
                     cout << "Livre retourné avec succès !\n";
+                    fileManager.creerJournal("RETOUR", isbn);
                 } else {
                     cout << "Erreur : Impossible de retourner le livre. Vérifiez l'ISBN et que le livre est bien emprunté.\n";
                 }
@@ -249,6 +267,7 @@ int main(int argc, char* argv[]) {
                 cout << "Livres Disponibles : " << library.getAvailableBookCount() << "\n";
                 cout << "Livres Empruntés : " << library.getCheckedOutBookCount() << "\n";
                 cout << "Total des Utilisateurs : " << library.getAllUsers().size() << "\n";
+                fileManager.creerJournal("STATISTIQUES", "");
                 pauseForInput();
                 break;
             }
@@ -260,6 +279,7 @@ int main(int argc, char* argv[]) {
                 }
                 else if (fileManager.saveLibraryData(library)) {
                     cout << "Données de la bibliothèque sauvegardées avec succès !\n";
+                    fileManager.creerJournal("SAUVEGARDE", "");
                 } else {
                     cout << "Erreur lors de la sauvegarde des données de la bibliothèque.\n";
                 }
@@ -273,6 +293,7 @@ int main(int argc, char* argv[]) {
                     cout << "Ajouter un répertoire de données\n"; 
                 } else {
                 fileManager.createBackup();
+                fileManager.creerJournal("BACKUP", "");
                 }     
                 pauseForInput();
                 break;
@@ -287,6 +308,7 @@ int main(int argc, char* argv[]) {
                 fileManager.saveLibraryData(library);
             }
                 cout << "Merci d'avoir utilisé le Système de Gestion de Bibliothèque Personnelle !\n";
+                fileManager.creerJournal("QUITTER", "");
                 running = false;
                 break;
             
