@@ -68,9 +68,9 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    string booksFile;
-    string usersFile;
-    string journalFile;
+    string booksFile = "./data/books.txt";
+    string usersFile = "./data/users.txt";
+    string journalFile = "./data/journal.txt";
     if (!dataDir.empty()) {
         if (!filesystem::is_directory(dataDir)) {
             cerr << "Erreur : le répertoire " << dataDir << " n'existe pas.\n";
@@ -273,11 +273,7 @@ int main(int argc, char* argv[]) {
             }
             
             case 12: { // Save Data
-                if(dataDir.empty()){
-                    cout << "Aucun répertoire de données spécifié. Les données ne seront pas sauvegardées\n"; 
-                    cout << "Ajouter un répertoire de données\n"; 
-                }
-                else if (fileManager.saveLibraryData(library)) {
+                if (fileManager.saveLibraryData(library)) {
                     cout << "Données de la bibliothèque sauvegardées avec succès !\n";
                     fileManager.creerJournal("SAUVEGARDE", "");
                 } else {
@@ -288,25 +284,17 @@ int main(int argc, char* argv[]) {
             }
             
             case 13: { // Create Backup
-                if(dataDir.empty()){
-                    cout << "Aucun répertoire de données spécifié. Les données ne seront pas crées\n"; 
-                    cout << "Ajouter un répertoire de données\n"; 
-                } else {
                 fileManager.createBackup();
                 fileManager.creerJournal("BACKUP", "");
-                }     
+   
                 pauseForInput();
                 break;
             }
             
             case 0: // Exit
-            if(dataDir.empty()){
-                cout << "Aucun répertoire de données spécifié. Les données ne seront pas sauvegardées\n";
-                cout << "Ajouter un répertoire de données\n"; 
-            }else{
                 cout << "Sauvegarde des données avant la fermeture...\n";
                 fileManager.saveLibraryData(library);
-            }
+            
                 cout << "Merci d'avoir utilisé le Système de Gestion de Bibliothèque Personnelle !\n";
                 fileManager.creerJournal("QUITTER", "");
                 running = false;
