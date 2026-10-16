@@ -70,6 +70,7 @@ int main(int argc, char* argv[]) {
 
     string booksFile;
     string usersFile;
+    string journalFile;
     if (!dataDir.empty()) {
         if (!filesystem::is_directory(dataDir)) {
             cerr << "Erreur : le répertoire " << dataDir << " n'existe pas.\n";
@@ -78,10 +79,11 @@ int main(int argc, char* argv[]) {
         }
         booksFile = (filesystem::path(dataDir) / "books.txt").string();
         usersFile = (filesystem::path(dataDir) / "users.txt").string();
+        journalFile = (filesystem::path(dataDir) / "journal.txt").string();
     }
 
     Library library;
-    FileManager fileManager(booksFile, usersFile);
+    FileManager fileManager(booksFile, usersFile, journalFile);
     
     // Load existing data
     cout << "Chargement des données de la bibliothèque...\n";
@@ -212,6 +214,16 @@ int main(int argc, char* argv[]) {
                 
                 if (library.checkOutBook(isbn, userId)) {
                     cout << "Livre emprunté avec succès !\n";
+                    Book* b = library.findBookByISBN(isbn);
+                    User* u = library.findUserById(userId);
+                    string info = b->getTitle() + "|" + b->getAuthor() + "|" + b->getISBN();
+                    if(b->getAvailability() == false){
+                        info += "|0|" + u->getName();
+                    } else{
+                        info += "|1|";
+                    }
+                    fileManager.creerJournal("EMPRUNT", info);
+
                 } else {
                     cout << "Erreur : Impossible d'emprunter le livre. Vérifiez l'ISBN, l'ID utilisateur et la disponibilité du livre.\n";
                 }
